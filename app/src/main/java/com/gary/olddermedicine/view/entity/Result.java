@@ -1,72 +1,45 @@
 package com.gary.olddermedicine.view.entity;
 
+import com.google.gson.Gson;
+
 /**
- * describe:
- *
- * @author Gary
- * @date 2019/03/17
+ * 统一API响应结果封装
  */
-public class Result {
-    private boolean flag;
-    private Integer code;
+public class Result<T> {
+    private int code;
     private String message;
-    private Object data;
+    private T data;
 
-    public Result() {
+    public Result setCode(ResultCode resultCode) {
+        this.code = resultCode.code();
+        return this;
     }
 
-    public Result(boolean flag, Integer code, String message) {
-        this.flag = flag;
-        this.code = code;
-        this.message = message;
-    }
-
-    public Result(boolean flag, Integer code, String message, Object data) {
-        this.flag = flag;
-        this.code = code;
-        this.message = message;
-        this.data = data;
-    }
-
-    public boolean isFlag() {
-        return flag;
-    }
-
-    public void setFlag(boolean flag) {
-        this.flag = flag;
-    }
-
-    public Integer getCode() {
+    public int getCode() {
         return code;
-    }
-
-    public void setCode(Integer code) {
-        this.code = code;
     }
 
     public String getMessage() {
         return message;
     }
 
-    public void setMessage(String message) {
+    public Result setMessage(String message) {
         this.message = message;
+        return this;
     }
 
-    public Object getData() {
+    public T getData() {
         return data;
     }
 
-    public void setData(Object data) {
+    public Result setData(T data) {
         this.data = data;
+        return this;
     }
 
     @Override
     public String toString() {
-        return "Result{" +
-                "flag=" + flag +
-                ", code=" + code +
-                ", message='" + message + '\'' +
-                ", data=" + data +
-                '}';
+
+        return new Gson().toJson(this);
     }
 }

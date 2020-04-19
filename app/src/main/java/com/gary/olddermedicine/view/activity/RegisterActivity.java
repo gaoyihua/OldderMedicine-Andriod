@@ -1,7 +1,6 @@
 package com.gary.olddermedicine.view.activity;
 
 import android.annotation.SuppressLint;
-import android.database.sqlite.SQLiteDatabase;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,7 +14,7 @@ import android.widget.Toast;
 
 import com.gary.olddermedicine.R;
 import com.gary.olddermedicine.view.entity.Result;
-import com.gary.olddermedicine.view.entity.StatusCode;
+import com.gary.olddermedicine.view.entity.ResultCode;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
@@ -54,7 +53,7 @@ public class RegisterActivity extends AppCompatActivity {
             @Override
             public void handleMessage(Message msg) {
                 super.handleMessage(msg);
-                if (StatusCode.OK == msg.arg1) {
+                if (ResultCode.SUCCESS.code() == msg.arg1) {
                     Toast.makeText(RegisterActivity.this, "注册成功！", Toast.LENGTH_SHORT).show();
                 }
             }
@@ -103,7 +102,7 @@ public class RegisterActivity extends AppCompatActivity {
                     @Override
                     public void run() {
                         try {
-                            URL url = new URL("http://10.0.2.2:8080/user/register");
+                            URL url = new URL("http://10.0.2.2:8080/om/user/register");
 
                             HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
 
@@ -156,7 +155,7 @@ public class RegisterActivity extends AppCompatActivity {
                                 Gson gson = new Gson();
                                 Result result = gson.fromJson(stringBuffer.toString(), Result.class);
 
-                                if (StatusCode.OK == result.getCode()) {
+                                if (ResultCode.SUCCESS.code() == result.getCode()) {
                                     System.out.println("获取" + result.toString());
                                     Message msg = new Message();
                                     msg.arg1 = result.getCode();

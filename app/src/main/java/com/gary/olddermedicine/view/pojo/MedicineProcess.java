@@ -7,8 +7,17 @@ public class MedicineProcess extends DataSupport {
     private long time;
     private String medicineInfo;
     private boolean isFinish;
+    private String phone;
 
     public MedicineProcess() {
+    }
+
+    public MedicineProcess(int id, long time, String medicineInfo, boolean isFinish, String phone) {
+        this.id = id;
+        this.time = time;
+        this.medicineInfo = medicineInfo;
+        this.isFinish = isFinish;
+        this.phone = phone;
     }
 
     public MedicineProcess(int id, long time, String medicineInfo, boolean isFinish) {
@@ -22,6 +31,21 @@ public class MedicineProcess extends DataSupport {
         this.time = time;
         this.medicineInfo = medicineInfo;
         this.isFinish = isFinish;
+    }
+
+    public MedicineProcess(long time, String medicineInfo, boolean isFinish, String phone) {
+        this.time = time;
+        this.medicineInfo = medicineInfo;
+        this.isFinish = isFinish;
+        this.phone = phone;
+    }
+
+    public String getPhone() {
+        return phone;
+    }
+
+    public void setPhone(String phone) {
+        this.phone = phone;
     }
 
     public int getId() {

@@ -62,11 +62,11 @@ public class FragmentNews extends Fragment {
     }
 
     private void initializeLitePal() {
-        addMedicineProcessToLitePal(new Date().getTime(), "咳咳片-一天三次, 护肝胶囊1-一次四粒", false);
-        addMedicineProcessToLitePal(new Date().getTime(), "咳咳片-一天三次, 护肝胶囊1-一次四粒", false);
+        addMedicineProcessToLitePal(new Date().getTime(), "咳咳片-一天三次, 护肝胶囊1-一次四粒", false, "18792958337");
+        addMedicineProcessToLitePal(new Date().getTime(), "咳咳片-一天三次, 护肝胶囊1-一次四粒", false, "18792958337");
     }
 
-    private void addMedicineProcessToLitePal(long time, String medicineInfo, boolean isFinish) {
-        new MedicineProcess(time, medicineInfo, isFinish).save();
+    private void addMedicineProcessToLitePal(long time, String medicineInfo, boolean isFinish, String phone) {
+        new MedicineProcess(time, medicineInfo, isFinish, phone).save();
     }
 }

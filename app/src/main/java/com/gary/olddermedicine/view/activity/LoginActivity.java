@@ -33,7 +33,7 @@ import android.widget.Toast;
 
 import com.gary.olddermedicine.R;
 import com.gary.olddermedicine.view.entity.Result;
-import com.gary.olddermedicine.view.entity.StatusCode;
+import com.gary.olddermedicine.view.entity.ResultCode;
 import com.gary.olddermedicine.view.pojo.OmUser;
 import com.gary.olddermedicine.view.util.Validator;
 import com.google.gson.Gson;
@@ -347,7 +347,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
 //                }
 //            }
             try {
-                URL url = new URL("http://10.0.2.2:8080/user/login");
+                URL url = new URL("http://10.0.2.2:8080/om/user/login");
 
                 HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
 
@@ -381,7 +381,7 @@ public class LoginActivity extends AppCompatActivity implements LoaderCallbacks<
                     Gson gson = new Gson();
                     Result result = gson.fromJson(stringBuffer.toString(), Result.class);
                     OmUser data = gson.fromJson(result.getData().toString(), OmUser.class);
-                    if (StatusCode.OK == result.getCode()) {
+                    if (ResultCode.SUCCESS.code() == result.getCode()) {
                         System.out.println("获取" + result.toString());
                         System.out.println("user" + data.toString());
                         id = data.getId();

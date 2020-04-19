@@ -104,7 +104,9 @@ public class AlarmActivity extends Activity {
     }
 
     private void saveProcess(Date time, boolean isFinish) {
-        new MedicineProcess(time.getTime(), medicineInfo, isFinish).save();
+        SharedPreferences sp = getSharedPreferences("myShare", MODE_PRIVATE);
+        String phone = sp.getString("email", "XXX99999999");
+        new MedicineProcess(time.getTime(), medicineInfo, isFinish, phone).save();
         showCurrentData();
         if (!isFinish) {
             isTellEmergencyPhone();
