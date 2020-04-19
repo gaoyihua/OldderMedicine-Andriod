@@ -1,0 +1,15 @@
+<resources>
+    <string name="app_name">Healthy</string>
+    <string name="prompt_email">你的邮箱</string>
+    <string name="prompt_name">你的名称</string>
+    <string name="prompt_desc">自我介绍</string>
+    <string name="prompt_password">请输入密码</string>
+    <string name="action_sign_in">登陆</string>
+    <string name="action_regist">注册</string>
+    <string name="action_sign_in_short">登陆</string>
+    <string name="error_invalid_email">邮箱格式不正确</string>
+    <string name="error_invalid_password">密码太短啦</string>
+    <string name="error_incorrect_password">密码不正确</string>
+    <string name="error_field_required">请求失败</string>
+    <string name="permission_rationale">"Contacts permissions are needed for providing email completions."</string>
+</resources>

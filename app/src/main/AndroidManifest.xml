@@ -1,0 +1,47 @@
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.gary.olddermedicine">
+    <application
+        android:name="org.litepal.LitePalApplication"
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme"
+        android:usesCleartextTraffic="true">
+        <activity android:name=".view.activity.MainActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".view.activity.AlarmActivity">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".view.activity.EditRecord"></activity>
+        <activity android:name=".view.activity.RegisterActivity"></activity>
+        <activity android:name=".view.activity.LoginActivity"></activity>
+        <activity android:name=".view.activity.EditMedicine"></activity>
+        <activity android:name=".view.activity.UserSettingActivity"></activity>
+        <activity android:name=".view.activity.UserSettingDescActivity"></activity>
+        <activity android:name=".view.activity.UserSettingEmergencyPeopleActivity"></activity>
+        <activity android:name=".view.activity.UserSettingEmergencyPhoneActivity"></activity>
+        <activity android:name=".view.activity.UserSettingNameActivity"></activity>
+        <activity android:name=".view.activity.UserSettingSexActivity"></activity>
+        <receiver
+            android:name=".view.receiver.RepeatingAlarm">
+            <intent-filter >
+                <action android:name="com.gary.alarm"/>
+            </intent-filter>
+        </receiver>
+    </application>
+    <uses-permission android:name="com.android.alarm.permission.SET_ALARM" />
+    <uses-permission android:name="android.permission.CALL_PHONE" />
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+</manifest>
