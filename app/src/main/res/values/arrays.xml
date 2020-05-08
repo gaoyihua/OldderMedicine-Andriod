@@ -4,4 +4,9 @@
         <item>男</item>
         <item>女</item>
     </string-array>
+    <string-array name="query_condition">
+        <item>全部</item>
+        <item>已服药</item>
+        <item>未服药</item>
+    </string-array>
 </resources>

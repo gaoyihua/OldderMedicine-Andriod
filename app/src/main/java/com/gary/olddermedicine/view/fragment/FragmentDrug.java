@@ -3,7 +3,6 @@ package com.gary.olddermedicine.view.fragment;
 import android.annotation.SuppressLint;
 import android.content.ContentValues;
 import android.content.Intent;
-import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -22,7 +21,6 @@ import com.gary.olddermedicine.view.adapter.MedicineRecordAdapter;
 import com.gary.olddermedicine.view.entity.Result;
 import com.gary.olddermedicine.view.entity.ResultCode;
 import com.gary.olddermedicine.view.pojo.Medicine;
-import com.gary.olddermedicine.view.pojo.OmUser;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -74,6 +72,7 @@ public class FragmentDrug extends Fragment {
                 it.putExtra("name","");
                 it.putExtra("dosage","");
                 it.putExtra("remain",0);
+                it.putExtra("category","");
 
                 startActivityForResult(it,position);
             }
@@ -108,7 +107,7 @@ public class FragmentDrug extends Fragment {
             @Override
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
                 Intent it = new Intent(inflater.getContext(), EditMedicine.class);
-
+                System.out.println("position:" + position);
                 Medicine medicine = getMedicineWithNum(position);
 
                 it.putExtra("num",medicine.getNum());
@@ -116,6 +115,7 @@ public class FragmentDrug extends Fragment {
                 it.putExtra("name",medicine.getName());
                 it.putExtra("dosage",medicine.getDosage());
                 it.putExtra("remain",medicine.getRemain());
+                it.putExtra("category",medicine.getCategory());
 
                 startActivityForResult(it,position);
             }
@@ -126,6 +126,7 @@ public class FragmentDrug extends Fragment {
                 super.handleMessage(msg);
                 if (ResultCode.SUCCESS.code() == msg.arg1) {
                     medicineRecordAdapter.notifyDataSetChanged();
+                    showCurrentData();
                 }
             }
         };
@@ -264,20 +265,22 @@ public class FragmentDrug extends Fragment {
                         if (ResultCode.SUCCESS.code() == result.getCode()) {
                             System.out.println("获取" + result.toString());
                             System.out.println("data" + data.toString());
+                            for(Medicine medicine : data) {
+                                Log.d("MainActivity", "id: " + medicine.getId());
+                                Log.d("MainActivity", "name: " + medicine.getName());
+                                Log.d("MainActivity", "num: " + medicine.getNum());
+                                Log.d("MainActivity", "dosage: " + medicine.getDosage());
+                                Log.d("MainActivity", "remain: " + medicine.getRemain());
+                                Log.d("MainActivity", "category: " + medicine.getCategory());
+
+                                Medicine temp = new Medicine(medicine.getId(), medicine.getName(), medicine.getNum(), medicine.getDosage(), medicine.getRemain(), medicine.getTag(), medicine.getCategory());
+
+                                System.out.println("saveIsSuccessful:" + medicine.save());
+                                medicineList.add(temp);
+                            }
                             Message msg = new Message();
                             msg.arg1 = result.getCode();
                             handler.sendMessage(msg);
-                        }
-                        for(Medicine medicine : data) {
-                            Log.d("MainActivity", "id: " + medicine.getId());
-                            Log.d("MainActivity", "name: " + medicine.getName());
-                            Log.d("MainActivity", "num: " + medicine.getNum());
-                            Log.d("MainActivity", "dosage: " + medicine.getDosage());
-                            Log.d("MainActivity", "remain: " + medicine.getRemain());
-
-                            Medicine temp = new Medicine(medicine.getId(), medicine.getName(), medicine.getNum(), medicine.getDosage(), medicine.getRemain());
-                            temp.save();
-                            medicineList.add(temp);
                         }
                     }
                 } catch (IOException e) {
@@ -286,7 +289,6 @@ public class FragmentDrug extends Fragment {
 
             }
         }).start();
-
 //        if(medicines.size()==0) {
 //            initializeLitePal();
 //            medicines = DataSupport.findAll(Medicine.class);
@@ -304,14 +306,14 @@ public class FragmentDrug extends Fragment {
 //        }
     }
 
-    private void initializeLitePal() {
-        addMedicineToLitePal("硫糖铝片", 97, "成人：口服，一次1g，一日4次，饭前1小时及睡前空腹嚼碎服用。小儿遵医嘱。", 0, 0);
-        addMedicineToLitePal("葡萄糖钙片", 98, "成人每日0.5-2g，餐后服。", 1, 0);
-    }
+//    private void initializeLitePal() {
+//        addMedicineToLitePal("硫糖铝片", 97, "成人：口服，一次1g，一日4次，饭前1小时及睡前空腹嚼碎服用。小儿遵医嘱。", 0, 0);
+//        addMedicineToLitePal("葡萄糖钙片", 98, "成人每日0.5-2g，餐后服。", 1, 0);
+//    }
 
-    private void addMedicineToLitePal(final String name, final int remain, final String dosage, final int num, final int tag) {
-        new Medicine(name, remain, dosage, num, tag).save();
-        final Medicine medicine = new Medicine(name, remain, dosage, num, tag);
+    private void addMedicineToLitePal(final String name, final int remain, final String dosage, final int num, final int tag, final String category) {
+        new Medicine(name, remain, dosage, num, tag, category).save();
+        final Medicine medicine = new Medicine(name, remain, dosage, num, tag, category);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -332,6 +334,7 @@ public class FragmentDrug extends Fragment {
                     map.put("num", medicine.getNum() + "");
                     map.put("tag", medicine.getTag() + "");
                     map.put("dosage", medicine.getDosage());
+                    map.put("category", medicine.getCategory());
                     JSONObject jsonObject = new JSONObject(map);
 
                     DataOutputStream dos=new DataOutputStream(httpURLConnection.getOutputStream());
@@ -365,9 +368,10 @@ public class FragmentDrug extends Fragment {
         }).start();
     }
 
-    private Medicine getMedicineWithNum(final int num) {
+    private Medicine getMedicineWithNum(int num) {
         String whereArgs = String.valueOf(num);
-        Medicine medicine= DataSupport.where("num = ?", whereArgs).findFirst(Medicine.class);
+        return DataSupport.where("num = ?", whereArgs).findFirst(Medicine.class);
+    }
 //        new Thread(new Runnable() {
 //            @Override
 //            public void run() {
@@ -416,8 +420,6 @@ public class FragmentDrug extends Fragment {
 //                }
 //            }
 //        }).start();
-        return medicine;
-    }
 
     public void onActivityResult(int requestCode, int resultCode, Intent it) {
         if(resultCode==RESULT_OK) {
@@ -429,16 +431,17 @@ public class FragmentDrug extends Fragment {
         String name=it.getStringExtra("name");
         String dosage=it.getStringExtra("dosage");
         String remain=it.getStringExtra("remain");
+        String category=it.getStringExtra("category");
         int re = 0;
         if (remain != null) {
             re = Integer.valueOf(remain);
         }
         int tag=it.getIntExtra("tag",0);
         int num = requestCode;
-        Medicine medicine = new Medicine(name, re, dosage, num, tag);
+        Medicine medicine = new Medicine(name, re, dosage, num, tag, category);
 
         if((requestCode+1)>medicineList.size()) {
-            addMedicineToLitePal(name, re, dosage, num, tag);
+            addMedicineToLitePal(name, re, dosage, num, tag, category);
 
             medicineList.add(medicine);
         }
@@ -449,9 +452,10 @@ public class FragmentDrug extends Fragment {
             temp.put("name", name);
             temp.put("dosage", dosage);
             temp.put("remain", remain);
+            temp.put("category", category);
             String where = String.valueOf(num);
             DataSupport.updateAll(Medicine.class, temp, "num = ?", where);
-            updateMedicineByNum(tag, name, dosage, re, num);
+            updateMedicineByNum(tag, name, dosage, re, num, category);
 
             medicineList.set(num, medicine);
         }
@@ -459,8 +463,8 @@ public class FragmentDrug extends Fragment {
         showCurrentData();
     }
 
-    private void updateMedicineByNum(int tag, String name, String dosage, int remain, int num) {
-        final Medicine medicine = new Medicine(name, remain, dosage, num, tag);
+    private void updateMedicineByNum(int tag, String name, String dosage, int remain, int num, String category) {
+        final Medicine medicine = new Medicine(name, remain, dosage, num, tag, category);
         new Thread(new Runnable() {
             @Override
             public void run() {
@@ -481,6 +485,7 @@ public class FragmentDrug extends Fragment {
                     map.put("num", medicine.getNum() + "");
                     map.put("tag", medicine.getTag() + "");
                     map.put("dosage", medicine.getDosage());
+                    map.put("category", medicine.getCategory());
                     JSONObject jsonObject = new JSONObject(map);
 
                     DataOutputStream dos=new DataOutputStream(httpURLConnection.getOutputStream());
@@ -516,6 +521,7 @@ public class FragmentDrug extends Fragment {
 
     private void showCurrentData() {
         List<Medicine> Medicines= DataSupport.findAll(Medicine.class);
+        System.out.println("local size:" + Medicines.size());
         for(Medicine medicine : Medicines) {
             Log.d("CurrentData", "id: " + medicine.getId());
             Log.d("CurrentData", "current num: " + medicine.getNum());

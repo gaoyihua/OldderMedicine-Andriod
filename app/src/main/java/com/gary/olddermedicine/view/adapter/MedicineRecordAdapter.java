@@ -29,11 +29,11 @@ public class MedicineRecordAdapter extends ArrayAdapter<Medicine> {
         Medicine medicine = getItem(position);
         View view = LayoutInflater.from(getContext()).inflate(resourceId, parent, false);//实例化一个对象
         TextView name = view.findViewById(R.id.name_medicine);
-        TextView remain = view.findViewById(R.id.remain_medicine);
+        TextView category = view.findViewById(R.id.category_medicine);
         TextView dosage = view.findViewById(R.id.dosage_medicine);
         ImageView tag= view.findViewById(R.id.tag);
         name.setText(medicine.getName());
-        remain.setText(medicine.getRemain() + "");
+        category.setText(medicine.getCategory());
         dosage.setText(medicine.getDosage());
         if(medicine.getTag()<color.length)
             tag.setBackgroundColor(color[medicine.getTag()]);

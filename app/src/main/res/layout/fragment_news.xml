@@ -2,9 +2,9 @@
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:orientation="vertical"
-    android:gravity="center"
-    >
+    android:gravity="center">
 
     <TextView
         android:id="@+id/textView"
@@ -15,6 +15,29 @@
         android:textStyle="bold"
         android:text="TEXT"
         />
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+        <Spinner
+            android:id="@+id/condition_isFinish"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:entries="@array/query_condition"
+            android:layout_weight="5"
+            />
+        <top.androidman.SuperButton
+            android:id="@+id/query"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            app:color_normal="@color/colorPrimary"
+            app:corner="10dp"
+            app:text="查询"
+            app:textColor="@color/color_white"
+            app:textSize="20sp"
+            android:layout_marginRight="10dp"
+            android:layout_weight="1"/>
+    </LinearLayout>
     <ListView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

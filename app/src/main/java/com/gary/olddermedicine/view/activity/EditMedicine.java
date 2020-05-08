@@ -20,11 +20,13 @@ public class EditMedicine extends AppCompatActivity implements RadioGroup.OnChec
     EditText nameView;
     EditText dosageView;
     EditText remainView;
+    EditText categoryView;
     private int tag;
     private int num=0;
     private String name;
     private String dosage;
     private int remain;
+    private String category;
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
@@ -49,6 +51,8 @@ public class EditMedicine extends AppCompatActivity implements RadioGroup.OnChec
         dosageView.setText(dosage);
         remainView = findViewById(R.id.medicine_remain);
         remainView.setText(remain + "");
+        categoryView = findViewById(R.id.medicine_category);
+        categoryView.setText(category);
     }
     private void getInformationFromMain(Intent it) {
         num=it.getIntExtra("num",0);
@@ -56,6 +60,7 @@ public class EditMedicine extends AppCompatActivity implements RadioGroup.OnChec
         name = it.getStringExtra("name");
         remain = it.getIntExtra("remain", 0);
         tag=it.getIntExtra("tag",0);
+        category=it.getStringExtra("category");
     }
 
     private void setRadioButtonCheckedAccordingToTag(int tag) {
@@ -92,6 +97,7 @@ public class EditMedicine extends AppCompatActivity implements RadioGroup.OnChec
         it.putExtra("name",nameView.getText().toString());
         it.putExtra("dosage",dosageView.getText().toString());
         it.putExtra("remain",remainView.getText().toString());
+        it.putExtra("category",categoryView.getText().toString());
 
         setResult(RESULT_OK,it);
     }

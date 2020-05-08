@@ -54,13 +54,13 @@
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:text=" 剩余："/>
+                    android:text=" 类别："/>
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:textAppearance="?android:attr/textAppearanceLarge"
-                    android:id="@+id/remain_medicine"
+                    android:id="@+id/category_medicine"
                     android:textSize="16sp"
                     android:textColor="#908d8d"
                     android:typeface="sans"

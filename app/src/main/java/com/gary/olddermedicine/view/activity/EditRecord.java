@@ -124,8 +124,12 @@ public class EditRecord extends AppCompatActivity implements DatePickerDialog.On
                             //selectMedicineSets.remove(nameArray[which]);
                             selectMedicineSets.remove(medicineList.get(which).toString());
                         }
-                        String temp = selectMedicineSets.toString();
-                        selectMedicine.setText(temp.substring(1, temp.length() - 1));
+                        StringBuilder sb = new StringBuilder();
+                        for (String medicine : selectMedicineSets) {
+                            sb.append(medicine);
+                            sb.append("|");
+                        }
+                        selectMedicine.setText(sb.toString());
                     }
                 });
                 alertBuilder.setPositiveButton("确定", new DialogInterface.OnClickListener() {
@@ -193,7 +197,7 @@ public class EditRecord extends AppCompatActivity implements DatePickerDialog.On
         alarm_hour=hourOfDay;
         alarm_minute=minute;
 
-        alarm=alarm_year+"-"+alarm_month+"-"+alarm_day+" "+alarm_hour+":"+alarm_minute;
+        alarm=alarm_year+"-"+alarm_month+"-"+alarm_day+"-"+alarm_hour+"-"+alarm_minute;
         av.setText("Alert at "+alarm+"!");
         av.setVisibility(View.VISIBLE);
         Toast.makeText(this,"Alarm will be on at "+alarm+" !",Toast.LENGTH_LONG).show();
@@ -233,10 +237,10 @@ public class EditRecord extends AppCompatActivity implements DatePickerDialog.On
             while(i<alarm.length()&&alarm.charAt(i)!='-') i++;
             alarm_month=Integer.parseInt(alarm.substring(k,i));
             k=i+1;i++;
-            while(i<alarm.length()&&alarm.charAt(i)!=' ') i++;
+            while(i<alarm.length()&&alarm.charAt(i)!='-') i++;
             alarm_day=Integer.parseInt(alarm.substring(k,i));
             k=i+1;i++;
-            while(i<alarm.length()&&alarm.charAt(i)!=':') i++;
+            while(i<alarm.length()&&alarm.charAt(i)!='-') i++;
             alarm_hour=Integer.parseInt(alarm.substring(k,i));
             k=i+1;i++;
             alarm_minute=Integer.parseInt(alarm.substring(k));

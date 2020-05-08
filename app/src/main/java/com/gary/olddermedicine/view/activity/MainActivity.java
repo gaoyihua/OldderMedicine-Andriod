@@ -2,6 +2,8 @@ package com.gary.olddermedicine.view.activity;
 
 import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.util.Log;
@@ -19,8 +21,13 @@ import com.mxn.soul.flowingdrawer_core.FlowingDrawer;
 import com.ycl.tabview.library.TabView;
 import com.ycl.tabview.library.TabViewChild;
 
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
+import java.util.Locale;
+import java.util.Random;
 
 public class MainActivity extends AppCompatActivity implements View.OnClickListener{
 
@@ -52,6 +59,21 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         SharedPreferences sp = getSharedPreferences("myShare", MODE_PRIVATE);
         String email = sp.getString("email", "XXX99999999");
         infoName.setText(email);
+        for (int i = 25; i <= 26; i++) {
+            fun(i);
+        }
+    }
+
+    public static void fun(int day) {
+        Random random = new Random();
+        int sec = random.nextInt(60);
+        Calendar instance = Calendar.getInstance();
+        instance.set(2020, 4, day, 17, 5, sec);
+        System.out.println("----------------------------");
+        System.out.println("calen:" + instance.getTimeInMillis());
+        SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.CHINA);
+        System.out.println(ft.format(new Date(instance.getTimeInMillis())));
+        System.out.println("----------------------------");
     }
 
     private void initDrawer(){
@@ -74,12 +96,12 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
     }
 
     private void initTabView(){
-        List<TabViewChild> tabViewChildList=new ArrayList<>();
+        final List<TabViewChild> tabViewChildList=new ArrayList<>();
         TabViewChild tabViewChildMain = new TabViewChild(R.drawable.tab_main,R.drawable.tab_main1,"首页",
                 FragmentMain.newInstance("服药提醒"));
-        TabViewChild tabViewChildDrug = new TabViewChild(R.drawable.tab_drug,R.drawable.tab_drug1, "药物查询",
+        final TabViewChild tabViewChildDrug = new TabViewChild(R.drawable.tab_drug,R.drawable.tab_drug1, "药物查询",
                 FragmentDrug.newInstance("药物信息查询"));
-        TabViewChild tabViewChildNews = new TabViewChild(R.drawable.tab_news,R.drawable.tab_news1,"服药记录",
+        final TabViewChild tabViewChildNews = new TabViewChild(R.drawable.tab_news,R.drawable.tab_news1,"服药记录",
                 FragmentNews.newInstance("查看服药记录"));
         TabViewChild tabViewChildInfo = new TabViewChild(R.drawable.tab_info,R.drawable.tab_info1,"我的",
                 FragmentInfo.newInstance("我的"));
@@ -93,7 +115,10 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         tabView.setOnTabChildClickListener(new TabView.OnTabChildClickListener() {
             @Override
             public void onTabChildClick(int  position, ImageView currentImageIcon, TextView currentTextView) {
-
+                if (tabViewChildList.get(position).equals(tabViewChildNews)) {
+                    FragmentNews fragment = (FragmentNews)tabViewChildNews.getmFragment();
+                    fragment.loadHistoryData();
+                }
             }
         });
     }

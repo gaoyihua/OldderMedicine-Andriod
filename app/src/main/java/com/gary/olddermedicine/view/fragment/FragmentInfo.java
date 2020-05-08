@@ -109,15 +109,15 @@ public class FragmentInfo extends Fragment {
                 startActivity(intent);
             }
         });
-        Button testButton = view.findViewById(R.id.test_button);
-        testButton.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                showCurrentData();
-                List<MedicineProcess> list= DataSupport.where("isFinish=?", String.valueOf(0)).find(MedicineProcess.class);
-                System.out.println(list.size());
-            }
-        });
+//        Button testButton = view.findViewById(R.id.test_button);
+//        testButton.setOnClickListener(new View.OnClickListener() {
+//            @Override
+//            public void onClick(View v) {
+//                showCurrentData();
+//                List<MedicineProcess> list= DataSupport.where("isFinish=?", String.valueOf(0)).find(MedicineProcess.class);
+//                System.out.println(list.size());
+//            }
+//        });
         return view;
     }
 

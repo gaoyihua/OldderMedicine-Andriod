@@ -13,6 +13,32 @@ public class Record extends DataSupport {
     private String medicineInfo;
     private int id;
 
+    public Record(int num, int tag, String textDate, String textTime, String alarm, String mainText, String rate, String medicineInfo) {
+        this.num = num;
+        this.tag = tag;
+        this.textDate = textDate;
+        this.textTime = textTime;
+        this.alarm = alarm;
+        this.mainText = mainText;
+        this.rate = rate;
+        this.medicineInfo = medicineInfo;
+    }
+
+    public Record(int num, int tag, String textDate, String textTime, String alarm, String mainText, String rate, String medicineInfo, int id) {
+        this.num = num;
+        this.tag = tag;
+        this.textDate = textDate;
+        this.textTime = textTime;
+        this.alarm = alarm;
+        this.mainText = mainText;
+        this.rate = rate;
+        this.medicineInfo = medicineInfo;
+        this.id = id;
+    }
+
+    public Record() {
+    }
+
     public String getMedicineInfo() {
         return medicineInfo;
     }

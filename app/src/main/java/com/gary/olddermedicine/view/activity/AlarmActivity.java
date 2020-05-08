@@ -14,6 +14,7 @@ import android.content.res.AssetFileDescriptor;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Message;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
@@ -21,15 +22,25 @@ import android.util.Log;
 import android.widget.Toast;
 
 import com.gary.olddermedicine.R;
+import com.gary.olddermedicine.view.entity.Result;
+import com.gary.olddermedicine.view.entity.ResultCode;
 import com.gary.olddermedicine.view.pojo.MedicineProcess;
 import com.gary.olddermedicine.view.pojo.Record;
 import com.gary.olddermedicine.view.receiver.RepeatingAlarm;
+import com.google.gson.Gson;
 
+import org.json.JSONObject;
 import org.litepal.crud.DataSupport;
 
+import java.io.DataOutputStream;
 import java.io.IOException;
+import java.io.InputStream;
+import java.net.HttpURLConnection;
+import java.net.URL;
 import java.util.Date;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Random;
 
 public class AlarmActivity extends Activity {
@@ -107,10 +118,61 @@ public class AlarmActivity extends Activity {
         SharedPreferences sp = getSharedPreferences("myShare", MODE_PRIVATE);
         String phone = sp.getString("email", "XXX99999999");
         new MedicineProcess(time.getTime(), medicineInfo, isFinish, phone).save();
+        saveMedicineProcess(new MedicineProcess(time.getTime(), medicineInfo, isFinish, phone));
         showCurrentData();
         if (!isFinish) {
             isTellEmergencyPhone();
         }
+    }
+
+    private void saveMedicineProcess(final MedicineProcess medicineProcess) {
+        new Thread(new Runnable() {
+            @Override
+            public void run() {
+                try {
+                    URL url = new URL("http://10.0.2.2:8080/medicine/process/add");
+                    HttpURLConnection httpURLConnection = (HttpURLConnection) url.openConnection();
+                    httpURLConnection.setRequestProperty("Content-Type", "application/json");
+                    httpURLConnection.setRequestProperty("Connection", "Keep-Alive");
+                    httpURLConnection.setRequestProperty("Charset", "UTF-8");
+                    httpURLConnection.setUseCaches(false);
+                    httpURLConnection.setDoOutput(true);
+                    httpURLConnection.setDoInput(true);
+                    httpURLConnection.connect();
+
+                    Map<String, String> map = new HashMap<>();
+                    map.put("medicineInfo", medicineProcess.getMedicineInfo());
+                    map.put("phone", medicineProcess.getPhone());
+                    map.put("time", medicineProcess.getTime() + "");
+                    map.put("isFinish", medicineProcess.isFinish() + "");
+                    JSONObject jsonObject = new JSONObject(map);
+
+                    DataOutputStream dos=new DataOutputStream(httpURLConnection.getOutputStream());
+                    dos.write(jsonObject.toString().getBytes());
+                    dos.flush();
+                    dos.close();
+
+                    int resultCode = httpURLConnection.getResponseCode();
+                    if(HttpURLConnection.HTTP_OK==resultCode){
+                        InputStream inputStream = httpURLConnection.getInputStream();
+                        StringBuffer stringBuffer = new StringBuffer();
+                        byte [] buff = new byte[1024];
+                        int len;
+                        while((len = inputStream.read(buff))!=-1){
+                            stringBuffer.append(new String(buff,0,len,"utf-8"));
+                        }
+                        Gson gson = new Gson();
+                        Result result = gson.fromJson(stringBuffer.toString(), Result.class);
+
+                        if (ResultCode.SUCCESS.code() == result.getCode()) {
+                            System.out.println("获取" + result.toString());
+                        }
+                    }
+                } catch (IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+        }).start();
     }
 
     private void isTellEmergencyPhone() {

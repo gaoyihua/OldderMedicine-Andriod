@@ -34,7 +34,7 @@ public class RecordAdapter extends ArrayAdapter<OneRecord> {
         TextView mainText= view.findViewById(R.id.mainText);
         TextView medicineInfo = view.findViewById(R.id.medicineInfo);
         textDate.setText(oneRecord.getTextDate());
-        textTime.setText(oneRecord.getTextTime());
+        textTime.setText(oneRecord.getTextTime().replace("-", ":"));
         medicineInfo.setText(oneRecord.getMedicineInfo());
         if(oneRecord.getTag()<color.length)
             tag.setBackgroundColor(color[oneRecord.getTag()]);

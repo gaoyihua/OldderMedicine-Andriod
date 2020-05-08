@@ -9,13 +9,15 @@ public class Medicine extends DataSupport {
     private String dosage;
     private int remain;
     private int tag;
+    private String category;
 
-    public Medicine( String name, int remain, String dosage, int num, int tag) {
+    public Medicine(String name, int remain, String dosage, int num, int tag, String category) {
         this.name = name;
         this.num = num;
         this.dosage = dosage;
         this.remain = remain;
         this.tag = tag;
+        this.category = category;
     }
 
     public Medicine(String name, int remain, String dosage, int num) {
@@ -25,12 +27,22 @@ public class Medicine extends DataSupport {
         this.num = num;
     }
 
-    public Medicine(int id, String name, int num, String dosage, int remain) {
+    public Medicine(int id, String name, int num, String dosage, int remain, int tag, String category) {
         this.id = id;
         this.name = name;
         this.num = num;
         this.dosage = dosage;
         this.remain = remain;
+        this.tag = tag;
+        this.category = category;
+    }
+
+    public String getCategory() {
+        return category;
+    }
+
+    public void setCategory(String category) {
+        this.category = category;
     }
 
     public int getTag() {
