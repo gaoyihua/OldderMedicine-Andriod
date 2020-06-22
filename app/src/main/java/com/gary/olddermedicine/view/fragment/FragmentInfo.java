@@ -13,6 +13,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentActivity;
 import android.support.v4.content.ContextCompat;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -29,6 +30,7 @@ import com.gary.olddermedicine.view.pojo.MedicineProcess;
 
 import org.litepal.crud.DataSupport;
 
+import java.util.ArrayList;
 import java.util.List;
 
 import top.androidman.SuperButton;
@@ -109,16 +111,24 @@ public class FragmentInfo extends Fragment {
                 startActivity(intent);
             }
         });
+//        ActivityCompat.requestPermissions(this.getActivity(),new String[]{Manifest.permission.SEND_SMS} , 1);
 //        Button testButton = view.findViewById(R.id.test_button);
 //        testButton.setOnClickListener(new View.OnClickListener() {
 //            @Override
 //            public void onClick(View v) {
-//                showCurrentData();
-//                List<MedicineProcess> list= DataSupport.where("isFinish=?", String.valueOf(0)).find(MedicineProcess.class);
-//                System.out.println(list.size());
+//
+//                sendSMS("18792958337", "hello");
 //            }
 //        });
         return view;
+    }
+
+    public void sendSMS(String phoneNumber, String message) {
+        SmsManager smsManager = SmsManager.getDefault();
+        ArrayList<String> divideMessage = smsManager.divideMessage(message);
+        for (String text : divideMessage) {
+            smsManager.sendTextMessage(phoneNumber, null, text, null, null);
+        }
     }
 
     private void showCurrentData() {

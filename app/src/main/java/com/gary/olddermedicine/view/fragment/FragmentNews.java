@@ -22,15 +22,19 @@ import com.gary.olddermedicine.view.entity.Result;
 import com.gary.olddermedicine.view.entity.ResultCode;
 import com.gary.olddermedicine.view.pojo.Medicine;
 import com.gary.olddermedicine.view.pojo.MedicineProcess;
+import com.gary.olddermedicine.view.util.HttpUtil;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
 import org.json.JSONObject;
 import org.litepal.crud.DataSupport;
 
+import java.io.BufferedReader;
 import java.io.DataOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.util.ArrayList;
@@ -170,14 +174,15 @@ public class FragmentNews extends Fragment {
                     int resultCode = httpURLConnection.getResponseCode();
                     if(HttpURLConnection.HTTP_OK == resultCode){
                         InputStream inputStream = httpURLConnection.getInputStream();
-                        StringBuffer stringBuffer = new StringBuffer();
-                        byte [] buff = new byte[1024];
-                        int len;
-                        while((len = inputStream.read(buff))!=-1){
-                            stringBuffer.append(new String(buff,0,len,"utf-8"));
-                        }
+//                        StringBuffer stringBuffer = new StringBuffer();
+//                        byte [] buff = new byte[1024];
+//                        int len;
+//                        while((len = inputStream.read(buff))!=-1){
+//                            stringBuffer.append(new String(buff,0,len,"utf-8"));
+//                        }
+                        String response = HttpUtil.is2String(inputStream);
                         Gson gson = new Gson();
-                        Result result = gson.fromJson(stringBuffer.toString(), Result.class);
+                        Result result = gson.fromJson(response, Result.class);
                         List<MedicineProcess> data = gson.fromJson(result.getData().toString(), new TypeToken<List<MedicineProcess>>(){}.getType());
                         if (ResultCode.SUCCESS.code() == result.getCode()) {
                             System.out.println("获取" + result.toString());

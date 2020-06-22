@@ -59,16 +59,18 @@ public class MainActivity extends AppCompatActivity implements View.OnClickListe
         SharedPreferences sp = getSharedPreferences("myShare", MODE_PRIVATE);
         String email = sp.getString("email", "XXX99999999");
         infoName.setText(email);
-        for (int i = 25; i <= 26; i++) {
+        for (int i = 26; i <= 26; i++) {
             fun(i);
         }
     }
+
+
 
     public static void fun(int day) {
         Random random = new Random();
         int sec = random.nextInt(60);
         Calendar instance = Calendar.getInstance();
-        instance.set(2020, 4, day, 17, 5, sec);
+        instance.set(2020, 3, day, 12, 35, sec);
         System.out.println("----------------------------");
         System.out.println("calen:" + instance.getTimeInMillis());
         SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss", Locale.CHINA);

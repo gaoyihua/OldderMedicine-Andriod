@@ -1,6 +1,7 @@
 package com.gary.olddermedicine.view.activity;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.Message;
@@ -15,6 +16,7 @@ import android.widget.Toast;
 import com.gary.olddermedicine.R;
 import com.gary.olddermedicine.view.entity.Result;
 import com.gary.olddermedicine.view.entity.ResultCode;
+import com.gary.olddermedicine.view.util.Validator;
 import com.google.gson.Gson;
 
 import org.json.JSONObject;
@@ -55,6 +57,8 @@ public class RegisterActivity extends AppCompatActivity {
                 super.handleMessage(msg);
                 if (ResultCode.SUCCESS.code() == msg.arg1) {
                     Toast.makeText(RegisterActivity.this, "注册成功！", Toast.LENGTH_SHORT).show();
+                    Intent intent = new Intent(RegisterActivity.this, LoginActivity.class);
+                    startActivity(intent);
                 }
             }
         };
@@ -98,6 +102,16 @@ public class RegisterActivity extends AppCompatActivity {
 //                db.execSQL("insert into users values(?, ?, ?, ?, ?, ?, ?, ?)",
 //                        new Object[] {null, name, sex, phone, password, emergencyPhone, emergencyPeople, description});
 //                Toast.makeText(RegisterActivity.this, "注册成功！", Toast.LENGTH_SHORT).show();
+                String phone = phoneText.getText().toString();
+                if (!Validator.isMobile(phone)) {
+                    Toast.makeText(RegisterActivity.this, "您的电话号码格式有误！", Toast.LENGTH_SHORT).show();
+                    return;
+                }
+                String emergencyPhone = emergencyPhoneText.getText().toString();
+                if (!Validator.isMobile(emergencyPhone)) {
+                    Toast.makeText(RegisterActivity.this, "紧急联系人电话号码格式有误！", Toast.LENGTH_SHORT).show();
+                    return;
+                }
                 new Thread(new Runnable() {
                     @Override
                     public void run() {

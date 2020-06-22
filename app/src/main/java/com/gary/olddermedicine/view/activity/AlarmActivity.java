@@ -18,6 +18,7 @@ import android.os.Message;
 import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.telephony.SmsManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -37,6 +38,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.net.HttpURLConnection;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -71,6 +73,7 @@ public class AlarmActivity extends Activity {
         mp.setLooping(true);
         mp.start();
         alarmOialog();
+        ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.SEND_SMS} , 1);
     }
 
     @Override
@@ -92,7 +95,7 @@ public class AlarmActivity extends Activity {
     public void alarmOialog() {
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setMessage(mainText + "\n" + medicineInfo);
-        builder.setPositiveButton("稍等恰", new DialogInterface.OnClickListener() {
+        builder.setPositiveButton("稍等吃", new DialogInterface.OnClickListener() {
 
           @Override
           public void onClick(DialogInterface dialogInterface, int i) {
@@ -102,7 +105,7 @@ public class AlarmActivity extends Activity {
           }
         });
 
-        builder.setNegativeButton("已恰", new DialogInterface.OnClickListener() {
+        builder.setNegativeButton("已吃", new DialogInterface.OnClickListener() {
 
           @Override
           public void onClick(DialogInterface dialogInterface, int i) {
@@ -177,8 +180,20 @@ public class AlarmActivity extends Activity {
 
     private void isTellEmergencyPhone() {
         List<MedicineProcess> list= DataSupport.where("isFinish=?", String.valueOf(0)).find(MedicineProcess.class);
+        SharedPreferences sp = getSharedPreferences("myShare", MODE_PRIVATE);
+        String phone = sp.getString("emergencyPhone", "XXX99999999");
+        String name = sp.getString("name", "用户");
         if (list.size() != 0 && list.size() % 5 == 0) {
+            sendSMS(phone, name + "已经" + list.size() + "次未按时服药");
             acquire();
+        }
+    }
+
+    public void sendSMS(String phoneNumber, String message) {
+        SmsManager smsManager = SmsManager.getDefault();
+        ArrayList<String> divideMessage = smsManager.divideMessage(message);
+        for (String text : divideMessage) {
+            smsManager.sendTextMessage(phoneNumber, null, text, null, null);
         }
     }
 
@@ -194,6 +209,7 @@ public class AlarmActivity extends Activity {
             }else{
                 ActivityCompat.requestPermissions(this,new String[]{Manifest.permission.CALL_PHONE},MY_PERMISSIONS_REQUEST_CALL_PHONE);
             }
+            CallPhone();
         }else {
             CallPhone();
         }
